@@ -1,4 +1,5 @@
 import streamlit as st
+st.write("App booted successfully!")
 from espn_api.football import League
 import pandas as pd
 import numpy as np
@@ -175,4 +176,5 @@ if selected_week == current_week:
         annotation_text=f"Projected Median: {median_score:.2f}",
         annotation_position="top right"
     )
+
     st.plotly_chart(fig_median, use_container_width=True)
