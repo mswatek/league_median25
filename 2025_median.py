@@ -1,6 +1,6 @@
 import streamlit as st
 st.write("App booted successfully!")
-from espn_api.football import League
+#from espn_api.football import League
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -178,3 +178,4 @@ if selected_week == current_week:
     )
 
     st.plotly_chart(fig_median, use_container_width=True)
+
