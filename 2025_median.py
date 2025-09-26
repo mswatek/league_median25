@@ -187,20 +187,25 @@ st.caption(f"Last refreshed: {eastern_time.strftime('%Y-%m-%d %I:%M %p')} ET")
 
 st.subheader("🔍 Live Player Snapshot")
 
+st.subheader("🔍 Player Debug: Jaxon Smith-Njigba & Kyler Murray")
+
 scoreboard = league.scoreboard(week=selected_week)
 
 for matchup in scoreboard:
     for team in [matchup.home_team, matchup.away_team]:
-        st.write(f"Team: {team.team_name}")
-        safe_roster = []
         for p in team.roster:
-            name = getattr(p, "name", "Unknown")
-            points = getattr(p, "points", 0)
-            projected = getattr(p, "projected_points", "N/A")
-            slot = getattr(p, "lineupSlot", "N/A")
-            safe_roster.append((name, points, projected, slot))
-        st.write(safe_roster)
-
-for p in team.roster:
-    if "Smith-Njigba" in getattr(p, "name", ""):
-        st.write(vars(p))
+            name = getattr(p, "name", "")
+            if "Smith-Njigba" in name or "Kyler Murray" in name:
+                st.write(f"Team: {team.team_name}")
+                st.write({
+                    "Name": name,
+                    "Points": getattr(p, "points", "N/A"),
+                    "Projected Points": getattr(p, "projected_points", "N/A"),
+                    "Lineup Slot": getattr(p, "lineupSlot", "N/A"),
+                    "Position": getattr(p, "position", "N/A"),
+                    "Pro Team": getattr(p, "proTeam", "N/A"),
+                    "Injury Status": getattr(p, "injuryStatus", "N/A"),
+                    "Game Status": getattr(p, "gameStatus", "N/A"),
+                    "Last Updated": getattr(p, "last_updated", "N/A"),
+                    "Raw Object": vars(p)  # optional: full dump
+                })
