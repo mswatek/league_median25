@@ -238,7 +238,7 @@ for matchup in scoreboard:
             "Live Projected Total": live_total
         })
 
-st.subheader("📊 Player Game Status Breakdown by Team")
+st.subheader("📊 Game Status Breakdown by Team")
 
 scoreboard = league.scoreboard(week=selected_week)
 
@@ -251,13 +251,16 @@ for matchup in scoreboard:
         for p in team.roster:
             slot = getattr(p, "lineupSlot", "BE")
             if slot in ["BE", "IR"]:
-                continue  # skip bench and injured
+                continue
 
+            stats = getattr(p, "stats", {})
+            week_stats = stats.get(selected_week, {})
+            points = week_stats.get("points", 0) or 0
             status = getattr(p, "gameStatus", "NONE")
 
             if status == "FINAL":
                 completed += 1
-            elif status == "IN_PROGRESS":
+            elif points > 0:
                 in_progress += 1
             else:
                 not_started += 1
