@@ -185,23 +185,23 @@ eastern_time = datetime.now(ZoneInfo("America/New_York"))
 st.caption(f"Last refreshed: {eastern_time.strftime('%Y-%m-%d %I:%M %p')} ET")
 
 
-st.subheader("🔍 Live Player Snapshot")
-
-st.subheader("📊 Team-Level Projection Summary")
+st.subheader("📊 Team Actual Scores")
 
 scoreboard = league.scoreboard(week=selected_week)
 
 for matchup in scoreboard:
     for team in [matchup.home_team, matchup.away_team]:
+        actual = 0
+        for p in team.roster:
+            slot = getattr(p, "lineupSlot", "BE")
+            if slot in ["BE", "IR"]:
+                continue  # skip bench and injured
+
+            stats = getattr(p, "stats", {})
+            week_stats = stats.get(selected_week, {})
+            actual += week_stats.get("points", 0) or 0
+
         st.write({
             "Team": team.team_name,
-            "Current Score": round(getattr(team, "score", 0), 2),
-            "Pre-Matchup Projection": round(getattr(team, "projected_total_points", 0), 2),
-            "Season Total Points": round(getattr(team, "total_points", 0), 2)
+            "Actual Points": round(actual, 2)
         })
-
-actual = sum(
-    getattr(p.stats.get(selected_week, {}), "points", 0)
-    for p in team.roster
-    if getattr(p, "lineupSlot", "BE") not in ["BE", "IR"]
-)
