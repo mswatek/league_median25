@@ -187,22 +187,15 @@ st.caption(f"Last refreshed: {eastern_time.strftime('%Y-%m-%d %I:%M %p')} ET")
 
 st.subheader("🔍 Live Player Snapshot")
 
-st.subheader("🔍 Player Debug: Jaxon Smith-Njigba & Kyler Murray")
+st.subheader("📊 Team-Level Projection Summary")
 
 scoreboard = league.scoreboard(week=selected_week)
 
-for matchup in league.scoreboard(week=selected_week):
+for matchup in scoreboard:
     for team in [matchup.home_team, matchup.away_team]:
-        for p in team.roster:
-            if "Kyler Murray" in getattr(p, "name", ""):
-                stats = getattr(p, "stats", {})
-                current_week_stats = stats.get(selected_week, {})
-                actual = current_week_stats.get("points", 0)
-                projected = current_week_stats.get("projected_points", 0)
-                live_total = round(actual + (projected - actual), 2)
-                st.write({
-                    "Name": p.name,
-                    "Actual Points": actual,
-                    "Projected Points": projected,
-                    "Live Projected Total": live_total
-                })
+        st.write({
+            "Team": team.team_name,
+            "Current Score": round(getattr(team, "score", 0), 2),
+            "Pre-Matchup Projection": round(getattr(team, "projected_total_points", 0), 2),
+            "Season Total Points": round(getattr(team, "total_points", 0), 2)
+        })
