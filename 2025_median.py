@@ -205,3 +205,35 @@ for matchup in scoreboard:
             "Team": team.team_name,
             "Actual Points": round(actual, 2)
         })
+
+st.subheader("📈 Estimated Live Team Projections")
+
+scoreboard = league.scoreboard(week=selected_week)
+
+for matchup in scoreboard:
+    for team in [matchup.home_team, matchup.away_team]:
+        actual = 0
+        remaining = 0
+
+        for p in team.roster:
+            slot = getattr(p, "lineupSlot", "BE")
+            if slot in ["BE", "IR"]:
+                continue  # skip bench and injured
+
+            stats = getattr(p, "stats", {})
+            week_stats = stats.get(selected_week, {})
+
+            pts = week_stats.get("points", 0) or 0
+            proj = week_stats.get("projected_points", 0) or 0
+
+            actual += pts
+            remaining += max(proj - pts, 0)
+
+        live_total = round(actual + remaining, 2)
+
+        st.write({
+            "Team": team.team_name,
+            "Actual Points": round(actual, 2),
+            "Estimated Remaining": round(remaining, 2),
+            "Live Projected Total": live_total
+        })
