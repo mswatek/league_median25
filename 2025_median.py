@@ -200,3 +200,7 @@ for matchup in scoreboard:
             slot = getattr(p, "lineupSlot", "N/A")
             safe_roster.append((name, points, projected, slot))
         st.write(safe_roster)
+
+for p in team.roster:
+    if "Smith-Njigba" in getattr(p, "name", ""):
+        st.write(vars(p))
