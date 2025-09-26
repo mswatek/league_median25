@@ -1,3 +1,4 @@
 streamlit
 pandas
+plotly
 git+https://github.com/mswatek/espn-api-patched.git@master
