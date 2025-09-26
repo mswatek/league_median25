@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 
 # Inject CSS for theme-aware styling
@@ -180,4 +181,5 @@ if selected_week == current_week:
     st.plotly_chart(fig_median, use_container_width=True)
 
 
-st.caption(f"Last refreshed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+eastern_time = datetime.now(ZoneInfo("America/New_York"))
+st.caption(f"Last refreshed: {eastern_time.strftime('%Y-%m-%d %I:%M %p')} ET")
