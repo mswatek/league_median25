@@ -183,3 +183,11 @@ if selected_week == current_week:
 
 eastern_time = datetime.now(ZoneInfo("America/New_York"))
 st.caption(f"Last refreshed: {eastern_time.strftime('%Y-%m-%d %I:%M %p')} ET")
+
+
+st.subheader("🔍 Live Player Snapshot")
+for team in league.scoreboard(week=selected_week):
+    st.write(f"Team: {team.home_team.team_name}")
+    st.write([(p.name, p.points, getattr(p, "last_updated", "N/A")) for p in team.home_team.roster])
+    st.write(f"Team: {team.away_team.team_name}")
+    st.write([(p.name, p.points, getattr(p, "last_updated", "N/A")) for p in team.away_team.roster])
