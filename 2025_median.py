@@ -199,3 +199,9 @@ for matchup in scoreboard:
             "Pre-Matchup Projection": round(getattr(team, "projected_total_points", 0), 2),
             "Season Total Points": round(getattr(team, "total_points", 0), 2)
         })
+
+actual = sum(
+    getattr(p.stats.get(selected_week, {}), "points", 0)
+    for p in team.roster
+    if getattr(p, "lineupSlot", "BE") not in ["BE", "IR"]
+)
