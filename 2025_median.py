@@ -191,21 +191,18 @@ st.subheader("🔍 Player Debug: Jaxon Smith-Njigba & Kyler Murray")
 
 scoreboard = league.scoreboard(week=selected_week)
 
-for matchup in scoreboard:
+for matchup in league.scoreboard(week=selected_week):
     for team in [matchup.home_team, matchup.away_team]:
         for p in team.roster:
-            name = getattr(p, "name", "")
-            if "Smith-Njigba" in name or "Kyler Murray" in name:
-                st.write(f"Team: {team.team_name}")
+            if "Kyler Murray" in getattr(p, "name", ""):
+                stats = getattr(p, "stats", {})
+                current_week_stats = stats.get(selected_week, {})
+                actual = current_week_stats.get("points", 0)
+                projected = current_week_stats.get("projected_points", 0)
+                live_total = round(actual + (projected - actual), 2)
                 st.write({
-                    "Name": name,
-                    "Points": getattr(p, "points", "N/A"),
-                    "Projected Points": getattr(p, "projected_points", "N/A"),
-                    "Lineup Slot": getattr(p, "lineupSlot", "N/A"),
-                    "Position": getattr(p, "position", "N/A"),
-                    "Pro Team": getattr(p, "proTeam", "N/A"),
-                    "Injury Status": getattr(p, "injuryStatus", "N/A"),
-                    "Game Status": getattr(p, "gameStatus", "N/A"),
-                    "Last Updated": getattr(p, "last_updated", "N/A"),
-                    "Raw Object": vars(p)  # optional: full dump
+                    "Name": p.name,
+                    "Actual Points": actual,
+                    "Projected Points": projected,
+                    "Live Projected Total": live_total
                 })
