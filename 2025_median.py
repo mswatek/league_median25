@@ -191,3 +191,4 @@ for team in league.scoreboard(week=selected_week):
     st.write([(p.name, p.points, getattr(p, "last_updated", "N/A")) for p in team.home_team.roster])
     st.write(f"Team: {team.away_team.team_name}")
     st.write([(p.name, p.points, getattr(p, "last_updated", "N/A")) for p in team.away_team.roster])
+
