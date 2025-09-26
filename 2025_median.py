@@ -3,6 +3,8 @@ from espn_api.football import League
 import pandas as pd
 import numpy as np
 import plotly.express as px
+from datetime import datetime
+
 
 # Inject CSS for theme-aware styling
 st.markdown("""
@@ -176,3 +178,6 @@ if selected_week == current_week:
         annotation_position="top right"
     )
     st.plotly_chart(fig_median, use_container_width=True)
+
+
+st.caption(f"Last refreshed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
