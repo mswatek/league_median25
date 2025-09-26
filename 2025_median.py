@@ -186,9 +186,17 @@ st.caption(f"Last refreshed: {eastern_time.strftime('%Y-%m-%d %I:%M %p')} ET")
 
 
 st.subheader("🔍 Live Player Snapshot")
-for team in league.scoreboard(week=selected_week):
-    st.write(f"Team: {team.home_team.team_name}")
-    st.write([(p.name, p.points, getattr(p, "last_updated", "N/A")) for p in team.home_team.roster])
-    st.write(f"Team: {team.away_team.team_name}")
-    st.write([(p.name, p.points, getattr(p, "last_updated", "N/A")) for p in team.away_team.roster])
 
+scoreboard = league.scoreboard(week=selected_week)
+
+for matchup in scoreboard:
+    for team in [matchup.home_team, matchup.away_team]:
+        st.write(f"Team: {team.team_name}")
+        safe_roster = []
+        for p in team.roster:
+            name = getattr(p, "name", "Unknown")
+            points = getattr(p, "points", 0)
+            projected = getattr(p, "projected_points", "N/A")
+            slot = getattr(p, "lineupSlot", "N/A")
+            safe_roster.append((name, points, projected, slot))
+        st.write(safe_roster)
