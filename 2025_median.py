@@ -237,3 +237,34 @@ for matchup in scoreboard:
             "Estimated Remaining": round(remaining, 2),
             "Live Projected Total": live_total
         })
+
+st.subheader("📊 Player Game Status Breakdown by Team")
+
+scoreboard = league.scoreboard(week=selected_week)
+
+for matchup in scoreboard:
+    for team in [matchup.home_team, matchup.away_team]:
+        completed = 0
+        in_progress = 0
+        not_started = 0
+
+        for p in team.roster:
+            slot = getattr(p, "lineupSlot", "BE")
+            if slot in ["BE", "IR"]:
+                continue  # skip bench and injured
+
+            status = getattr(p, "gameStatus", "NONE")
+
+            if status == "FINAL":
+                completed += 1
+            elif status == "IN_PROGRESS":
+                in_progress += 1
+            else:
+                not_started += 1
+
+        st.write({
+            "Team": team.team_name,
+            "Completed Games": completed,
+            "Currently Playing": in_progress,
+            "Not Yet Started": not_started
+        })
